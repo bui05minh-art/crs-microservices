@@ -9,10 +9,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 public class CourseService {
     private final CourseRepository courseRepository;
+
     public List<CourseDTO> getAll() {
         return courseRepository.findAll()
 
@@ -20,11 +22,13 @@ public class CourseService {
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+
     public CourseDTO getById(Long id) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Khong tim  thay mon hoc id = " + id));
         return toDTO(course);
     }
+
     public CourseDTO create(CourseDTO dto) {
         if
         (courseRepository.existsByTenMonHocIgnoreCase(dto.getTenMonHoc())) {
@@ -38,16 +42,18 @@ public class CourseService {
         course.setSoChoConLai(dto.getSoChoToiDa());
         return toDTO(courseRepository.save(course));
     }
+
     public CourseDTO update(Long id, CourseDTO dto) {
         Course course = courseRepository.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("Khong tim thay mon hoc id = " + id));
-                        course.setTenMonHoc(dto.getTenMonHoc());
+        course.setTenMonHoc(dto.getTenMonHoc());
         course.setSoTinChi(dto.getSoTinChi());
         course.setSoChoToiDa(dto.getSoChoToiDa());
 // Khong cho sua truc tiep soChoConLai qua API update thong thuong
 // (soChoConLai chi duoc thay doi qua reserve-seat/release-seat o Buoi 3)
         return toDTO(courseRepository.save(course));
     }
+
     public void delete(Long id) {
         if (!courseRepository.existsById(id)) {
             throw new NoSuchElementException("Khong tim thay mon hoc id = "
@@ -55,6 +61,7 @@ public class CourseService {
         }
         courseRepository.deleteById(id);
     }
+
     private CourseDTO toDTO(Course course) {
         return new CourseDTO(
                 course.getId(),
@@ -64,5 +71,36 @@ public class CourseService {
                 course.getSoChoConLai()
         );
 
+    }
+
+    // Them phuong thuc moi trong class CourseService:
+    public Page<CourseDTO> search(String keyword, Pageable pageable) {
+        Page<Course> page = (keyword == null || keyword.isBlank())
+                ? courseRepository.findAll(pageable)
+                :
+                courseRepository.findByTenMonHocContainingIgnoreCase(keyword, pageable);
+        return page.map(this::toDTO);
+
+    }
+
+    @Transactional
+    public CourseDTO reserveSeat(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new NoSuchElementException("Khong tim thay mon hoc id = " + courseId));
+        if (course.getSoChoConLai() <= 0) {
+            throw new IllegalStateException("Mon hoc da het cho, khong the dang ky");
+        }
+        course.setSoChoConLai(course.getSoChoConLai() - 1);
+        return toDTO(courseRepository.save(course));
+    }
+
+    @Transactional
+    public CourseDTO releaseSeat(Long courseId) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new NoSuchElementException("Khong tim thay mon hoc id = " + courseId));
+        if (course.getSoChoConLai() < course.getSoChoToiDa()) {
+            course.setSoChoConLai(course.getSoChoConLai() + 1);
+        }
+        return toDTO(courseRepository.save(course));
     }
 }
