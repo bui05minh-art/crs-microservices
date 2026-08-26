@@ -1,7 +1,6 @@
 import { useState } from 'react';
 
 import { useCourses } from './api/useCourses';
-
 import SearchBox from './components/SearchBox';
 import CourseList from './components/CourseList';
 import Pagination from './components/Pagination';
@@ -29,29 +28,69 @@ function App() {
         setKeyword(newKeyword);
 
         // Mỗi lần tìm kiếm mới
-        // quay về trang đầu
+        // luôn quay về trang đầu
         setPage(0);
     };
 
     return (
         <div
             style={{
-                padding: 24,
-                fontFamily: 'sans-serif',
-                maxWidth: 800,
-                margin: '0 auto'
+                minHeight: '100vh',
+                background:
+                    'linear-gradient(135deg, #f5f7fb, #eef2ff)',
+                padding: '50px 20px',
+                boxSizing: 'border-box'
             }}
         >
 
-            <h1>
-                Danh sách môn học
-            </h1>
+            <div
+                style={{
+                    maxWidth: '1000px',
+                    margin: '0 auto'
+                }}
+            >
 
-            <SearchBox
-                onSearch={handleSearch}
-            />
+                {/* HEADER */}
 
-            <div style={{ marginTop: 16 }}>
+                <div
+                    style={{
+                        marginBottom: '28px'
+                    }}
+                >
+
+                    <h1
+                        style={{
+                            margin: 0,
+                            fontSize: '32px',
+                            fontWeight: '700',
+                            color: '#111827'
+                        }}
+                    >
+                        Danh sách môn học
+                    </h1>
+
+                    <p
+                        style={{
+                            marginTop: '8px',
+                            marginBottom: 0,
+                            color: '#6b7280',
+                            fontSize: '15px'
+                        }}
+                    >
+                        Quản lý và tìm kiếm thông tin môn học
+                    </p>
+
+                </div>
+
+
+                {/* SEARCH */}
+
+                <SearchBox
+                    onSearch={handleSearch}
+                />
+
+
+                {/* COURSE LIST */}
 
                 <CourseList
                     courses={courses}
@@ -60,13 +99,16 @@ function App() {
                     onRetry={refetch}
                 />
 
-            </div>
 
-            <Pagination
-                currentPage={page}
-                totalPages={totalPages}
-                onPageChange={setPage}
-            />
+                {/* PAGINATION */}
+
+                <Pagination
+                    currentPage={page}
+                    totalPages={totalPages}
+                    onPageChange={setPage}
+                />
+
+            </div>
 
         </div>
     );

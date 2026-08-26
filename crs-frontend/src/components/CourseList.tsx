@@ -18,23 +18,65 @@ export default function CourseList({
     // Loading
     if (state === 'loading') {
         return (
-            <p>
-                Đang tải danh sách môn học...
-            </p>
+            <div
+                style={{
+                    background: '#ffffff',
+                    borderRadius: '16px',
+                    padding: '50px',
+                    textAlign: 'center',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)',
+                    color: '#6b7280'
+                }}
+            >
+                <div
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500'
+                    }}
+                >
+                    Đang tải danh sách môn học...
+                </div>
+            </div>
         );
     }
 
     // Error
     if (state === 'error') {
         return (
-            <div style={{ color: '#b91c1c' }}>
+            <div
+                style={{
+                    background: '#fff7f7',
+                    border: '1px solid #fecaca',
+                    borderRadius: '16px',
+                    padding: '30px',
+                    color: '#b91c1c',
+                    boxShadow: '0 4px 15px rgba(0, 0, 0, 0.04)'
+                }}
+            >
+                <p
+                    style={{
+                        marginTop: 0,
+                        marginBottom: '15px',
+                        fontSize: '15px'
+                    }}
+                >
+                    {errorMessage}
+                </p>
 
-                <p>{errorMessage}</p>
-
-                <button onClick={onRetry}>
+                <button
+                    onClick={onRetry}
+                    style={{
+                        background: '#dc2626',
+                        color: '#ffffff',
+                        border: 'none',
+                        padding: '9px 18px',
+                        borderRadius: '8px',
+                        cursor: 'pointer',
+                        fontWeight: '600'
+                    }}
+                >
                     Thử lại
                 </button>
-
             </div>
         );
     }
@@ -42,75 +84,189 @@ export default function CourseList({
     // Empty
     if (state === 'empty') {
         return (
-            <p>
-                Không tìm thấy môn học nào phù hợp.
-            </p>
+            <div
+                style={{
+                    background: '#ffffff',
+                    borderRadius: '16px',
+                    padding: '50px',
+                    textAlign: 'center',
+                    color: '#6b7280',
+                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.06)'
+                }}
+            >
+                <div
+                    style={{
+                        fontSize: '16px',
+                        fontWeight: '500'
+                    }}
+                >
+                    Không tìm thấy môn học nào phù hợp.
+                </div>
+            </div>
         );
     }
 
     // Success
     return (
-        <table
+        <div
             style={{
-                width: '100%',
-                borderCollapse: 'collapse'
+                background: '#ffffff',
+                borderRadius: '16px',
+                padding: '8px',
+                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.07)',
+                border: '1px solid #e5e7eb',
+                overflow: 'hidden'
             }}
         >
 
-            <thead>
-
-            <tr
+            <table
                 style={{
-                    textAlign: 'left',
-                    borderBottom: '2px solid #333'
+                    width: '100%',
+                    borderCollapse: 'collapse'
                 }}
             >
-                <th>Tên môn học</th>
-                <th>Số tín chỉ</th>
-                <th>Số chỗ còn lại</th>
-            </tr>
 
-            </thead>
-
-            <tbody>
-
-            {courses.map((course: Course) => (
-
+                <thead>
                 <tr
-                    key={course.id}
                     style={{
-                        borderBottom:
-                            '1px solid #eee'
+                        background: '#f8fafc',
+                        textAlign: 'left'
                     }}
                 >
 
-                    <td>
-                        {course.tenMonHoc}
-                    </td>
-
-                    <td>
-                        {course.soTinChi}
-                    </td>
-
-                    <td
+                    <th
                         style={{
-                            color:
-                                course.soChoConLai === 0
-                                    ? '#b91c1c'
-                                    : 'inherit'
+                            padding: '17px 20px',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            color: '#374151',
+                            borderBottom: '1px solid #e5e7eb'
                         }}
                     >
-                        {course.soChoConLai}
-                        {' / '}
-                        {course.soChoToiDa}
-                    </td>
+
+                        Tên môn học
+                    </th>
+
+                    <th
+                        style={{
+                            padding: '17px 20px',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            color: '#374151',
+                            borderBottom: '1px solid #e5e7eb',
+                            textAlign: 'center'
+                        }}
+                    >
+                        Số tín chỉ
+                    </th>
+
+                    <th
+                        style={{
+                            padding: '17px 20px',
+                            fontSize: '14px',
+                            fontWeight: '700',
+                            color: '#374151',
+                            borderBottom: '1px solid #e5e7eb',
+                            textAlign: 'center'
+                        }}
+                    >
+                        Số chỗ còn lại
+                    </th>
 
                 </tr>
+                </thead>
 
-            ))}
+                <tbody>
 
-            </tbody>
+                {courses.map((course: Course) => {
 
-        </table>
+                    const isFull =
+                        course.soChoConLai === 0;
+
+                    return (
+                        <tr
+                            key={course.id}
+                            style={{
+                                borderBottom: '1px solid #f1f5f9',
+                                transition: 'background 0.2s'
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background =
+                                    '#f8fafc';
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background =
+                                    '#ffffff';
+                            }}
+                        >
+
+                            <td
+                                style={{
+                                    padding: '18px 20px',
+                                    fontSize: '15px',
+                                    fontWeight: '600',
+                                    color: '#1f2937'
+                                }}
+                            >
+                                {course.tenMonHoc}
+                            </td>
+
+                            <td
+                                style={{
+                                    padding: '18px 20px',
+                                    textAlign: 'center'
+                                }}
+                            >
+                  <span
+                      style={{
+                          display: 'inline-block',
+                          minWidth: '35px',
+                          padding: '5px 10px',
+                          borderRadius: '20px',
+                          background: '#eef2ff',
+                          color: '#4f46e5',
+                          fontWeight: '700',
+                          fontSize: '13px'
+                      }}
+                  >
+                    {course.soTinChi}
+                  </span>
+                            </td>
+
+                            <td
+                                style={{
+                                    padding: '18px 20px',
+                                    textAlign: 'center'
+                                }}
+                            >
+                  <span
+                      style={{
+                          display: 'inline-block',
+                          padding: '6px 12px',
+                          borderRadius: '20px',
+                          background: isFull
+                              ? '#fee2e2'
+                              : '#dcfce7',
+                          color: isFull
+                              ? '#dc2626'
+                              : '#16a34a',
+                          fontWeight: '700',
+                          fontSize: '13px'
+                      }}
+                  >
+                    {course.soChoConLai}
+                      {' / '}
+                      {course.soChoToiDa}
+                  </span>
+                            </td>
+
+                        </tr>
+                    );
+                })}
+
+                </tbody>
+
+            </table>
+        </div>
     );
 }

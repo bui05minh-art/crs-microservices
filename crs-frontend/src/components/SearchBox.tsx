@@ -16,9 +16,7 @@ export default function SearchBox({
     useEffect(() => {
 
         const timer = setTimeout(() => {
-
             onSearch(inputValue.trim());
-
         }, 400);
 
         return () => clearTimeout(timer);
@@ -26,24 +24,48 @@ export default function SearchBox({
     }, [inputValue, onSearch]);
 
     return (
-        <input
-            type="text"
-            value={inputValue}
-            onChange={(e) =>
-                setInputValue(e.target.value)
-            }
-            placeholder={
-                placeholder ??
-                'Tìm kiếm theo tên môn học...'
-            }
+        <div
             style={{
-                width: '100%',
-                maxWidth: 400,
-                padding: '8px 12px',
-                fontSize: 14,
-                border: '1px solid #ccc',
-                borderRadius: 6
+                position: 'relative',
+                marginBottom: '24px'
             }}
-        />
+        >
+
+            <input
+                type="text"
+                value={inputValue}
+
+                onChange={(e) =>
+                    setInputValue(e.target.value)
+                }
+
+                placeholder={
+                    placeholder ??
+                    'Tìm kiếm theo tên môn học...'
+                }
+
+                style={{
+                    width: '100%',
+                    height: '48px',
+                    boxSizing: 'border-box',
+
+                    padding: '0 18px',
+
+                    border: '1px solid #d1d5db',
+                    borderRadius: '10px',
+
+                    background: '#ffffff',
+
+                    fontSize: '15px',
+                    color: '#374151',
+
+                    outline: 'none',
+
+                    boxShadow:
+                        '0 2px 8px rgba(0, 0, 0, 0.04)'
+                }}
+            />
+
+        </div>
     );
 }
