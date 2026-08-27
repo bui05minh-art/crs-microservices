@@ -13,6 +13,7 @@ export interface PagedResponse<T> {
     number: number;
     size: number;
 }
+
 export interface CourseFormValues {
     tenMonHoc: string;
     soTinChi: string;

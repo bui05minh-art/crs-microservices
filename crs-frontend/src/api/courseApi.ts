@@ -1,55 +1,59 @@
 import axiosClient from './axiosClient';
-import type { Course, PagedResponse } from '../types/course';
+
+import type {
+    Course,
+    PagedResponse,
+    CourseFormValues,
+} from '../types/course';
 
 export const getCourses = (
     keyword?: string,
     page = 0,
     size = 10
 ) => {
-    return axiosClient.get<PagedResponse<Course>>('/api/courses', {
-        params: { keyword, page, size },
-    });
-};
-// Thêm môn học
-export const createCourse = async (data: {
-    tenMonHoc: string;
-    soTinChi: number;
-    soChoToiDa: number;
-}) => {
-    const response = await axiosClient.post(
+    return axiosClient.get<PagedResponse<Course>>(
         '/api/courses',
-        data
+        {
+            params: {
+                keyword,
+                page,
+                size,
+            },
+        }
     );
-
-    return response.data;
 };
 
+const toPayload = (
+    values: CourseFormValues
+) => ({
+    tenMonHoc: values.tenMonHoc.trim(),
+    soTinChi: Number(values.soTinChi),
+    soChoToiDa: Number(values.soChoToiDa),
+});
 
-// Sửa môn học
-export const updateCourse = async (
-    id: number,
-    data: {
-        tenMonHoc: string;
-        soTinChi: number;
-        soChoToiDa: number;
-    }
+export const createCourse = (
+    values: CourseFormValues
 ) => {
-    const response = await axiosClient.put(
-        `/api/courses/${id}`,
-        data
+    return axiosClient.post<Course>(
+        '/api/courses',
+        toPayload(values)
     );
-
-    return response.data;
 };
 
+export const updateCourse = (
+    id: number,
+    values: CourseFormValues
+) => {
+    return axiosClient.put<Course>(
+        `/api/courses/${id}`,
+        toPayload(values)
+    );
+};
 
-// Xóa môn học
-export const deleteCourse = async (
+export const deleteCourse = (
     id: number
 ) => {
-    const response = await axiosClient.delete(
+    return axiosClient.delete(
         `/api/courses/${id}`
     );
-
-    return response.data;
 };
