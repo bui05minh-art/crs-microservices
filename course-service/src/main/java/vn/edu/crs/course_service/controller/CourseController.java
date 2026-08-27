@@ -58,4 +58,11 @@ public class CourseController {
     public void delete(@PathVariable Long id) {
         courseService.delete(id);
     }
+    // Xem chi tiết 1 môn học
+    @GetMapping("/{id}")
+    public CourseDTO getById(
+            @PathVariable Long id
+    ) {
+        return courseService.getById(id);
+    }
 }
