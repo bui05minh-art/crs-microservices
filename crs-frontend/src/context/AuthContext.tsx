@@ -9,6 +9,7 @@ import {
 import type { LoginResponse } from '../types/auth';
 
 interface AuthUser {
+    id: number;
     username: string;
     role: 'ADMIN' | 'STUDENT';
 }
@@ -59,6 +60,7 @@ export function AuthProvider({
         );
 
         const authUser: AuthUser = {
+            id: data.userId,
             username: data.username,
             role: data.role,
         };

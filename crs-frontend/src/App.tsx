@@ -17,6 +17,9 @@ import RegisterCoursePage from './pages/RegisterCoursePage';
 
 import './App.css';
 
+import MyRegistrationsPage
+    from './pages/MyRegistrationsPage';
+
 function App() {
     return (
         <BrowserRouter>
@@ -58,6 +61,17 @@ function App() {
                                 requiredRole="ADMIN"
                             >
                                 <AdminCoursesPage />
+                            </ProtectedRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/my-registrations"
+                        element={
+                            <ProtectedRoute
+                                requiredRole="STUDENT"
+                            >
+                                <MyRegistrationsPage />
                             </ProtectedRoute>
                         }
                     />

@@ -9,6 +9,10 @@ interface CourseListProps {
 
     onEdit?: (course: Course) => void;
     onDelete?: (course: Course) => void;
+
+    // Buoi 9
+    onRegister?: (course: Course) => void;
+    registeringId?: number | null;
 }
 
 export default function CourseList({
@@ -18,16 +22,15 @@ export default function CourseList({
                                        onRetry,
                                        onEdit,
                                        onDelete,
+                                       onRegister,
+                                       registeringId,
                                    }: CourseListProps) {
 
     if (state === 'loading') {
         return (
             <div className="state-box">
                 <div className="loading-spinner"></div>
-
-                <p>
-                    Đang tải danh sách môn học...
-                </p>
+                <p>Đang tải danh sách môn học...</p>
             </div>
         );
     }
@@ -35,9 +38,7 @@ export default function CourseList({
     if (state === 'error') {
         return (
             <div className="state-box error-state">
-                <div className="state-icon">
-                    ⚠️
-                </div>
+                <div className="state-icon">⚠️</div>
 
                 <p>{errorMessage}</p>
 
@@ -54,13 +55,9 @@ export default function CourseList({
     if (state === 'empty') {
         return (
             <div className="state-box">
-                <div className="state-icon">
-                    🔍
-                </div>
+                <div className="state-icon">🔍</div>
 
-                <h3>
-                    Không tìm thấy môn học
-                </h3>
+                <h3>Không tìm thấy môn học</h3>
 
                 <p>
                     Không có môn học nào phù hợp
@@ -71,18 +68,17 @@ export default function CourseList({
     }
 
     const showActions =
-        !!onEdit || !!onDelete;
+        !!onEdit ||
+        !!onDelete ||
+        !!onRegister;
 
     return (
         <div className="table-wrapper">
-
             <table className="course-table">
 
                 <thead>
                 <tr>
-                    <th>
-                        📘 Tên môn học
-                    </th>
+                    <th>📘 Tên môn học</th>
 
                     <th className="center-column">
                         ⭐ Số tín chỉ
@@ -109,7 +105,7 @@ export default function CourseList({
                         </td>
 
                         <td className="center-column">
-                                <span className="credit-badge">
+                    <span className="credit-badge">
                                     {course.soTinChi}
                                 </span>
                         </td>
@@ -157,6 +153,27 @@ export default function CourseList({
                                         </button>
                                     )}
 
+                                    {onRegister && (
+                                        <button
+                                            type="button"
+                                            className="register-button"
+                                            onClick={() =>
+                                                onRegister(course)
+                                            }
+                                            disabled={
+                                                course.soChoConLai === 0 ||
+                                                registeringId === course.id
+                                            }
+                                        >
+                                            {
+                                                registeringId === course.id? 'Đang đăng ký...'
+                                                    : course.soChoConLai === 0
+                                                        ? 'Hết chỗ'
+                                                        : 'Đăng ký'
+                                            }
+                                        </button>
+                                    )}
+
                                 </div>
 
                             </td>
@@ -167,7 +184,6 @@ export default function CourseList({
                 </tbody>
 
             </table>
-
         </div>
     );
 }
