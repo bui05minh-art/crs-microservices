@@ -65,4 +65,5 @@ public class CourseController {
     ) {
         return courseService.getById(id);
     }
+
 }
